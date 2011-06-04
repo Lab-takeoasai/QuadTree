@@ -13,14 +13,20 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp\
         Exif.cpp\
-        QuadTree.cpp\
-    mapview.cpp \
-    imageview.cpp
+        region.cpp\
+        location.cpp\
+        ladybug.cpp\
+        quadtree.cpp\
+        mapview.cpp \
+        imageview.cpp
 
 HEADERS  += mainwindow.h\
         Exif.hpp\
-        QuadTree.hpp\
-    mapview.h \
-    imageview.h
+        quadtree.hpp\
+        region.hpp\
+        location.hpp\
+        ladybug.hpp\
+        mapview.h \
+        imageview.h
 
 FORMS    += mainwindow.ui

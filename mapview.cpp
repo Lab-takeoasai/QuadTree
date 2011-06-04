@@ -1,5 +1,7 @@
 #include "mapview.h"
 #include "stdio.h"
+//#include "region.hpp"
+
 
 #include "imageview.h"
 
@@ -7,7 +9,7 @@ MapView::MapView(QWidget *parent) :
     QWidget(parent)
 {
     this->setImage(NULL);
-    this->setRegion(NULL);
+//    this->setRegion(NULL);
 }
 
 void MapView::setImage(QPixmap *image) {
@@ -26,10 +28,11 @@ QPixmap *MapView::getImage() {
 MapView::~MapView() {
     if ( this->getImage() )
         delete image_;
-    if ( this->getRegion() )
-        delete region_;
+//    if ( this->getRegion() )
+ //       delete region_;
 }
 
+/*
 void MapView::setRegion(Region *reg) {
     if ( reg != NULL ) {
         this->region_ = new Region(*reg);
@@ -41,7 +44,7 @@ void MapView::setRegion(Region *reg) {
 Region *MapView::getRegion() {
     return this->region_;
 }
-
+*/
 
 
 //  privates

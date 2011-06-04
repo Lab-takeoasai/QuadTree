@@ -1,161 +1,196 @@
-#include "QuadTree.hpp"
+#include "quadtree.hpp"
+#include "region.hpp"
+#include "stdio.h"
+#include "math.h"
 
-Region Region::partition(enum partition p) {
-	double d = (r / 2.0);
-	double x = 0.0, y = 0.0;
-	switch (p) {
-		case kNWPartition:
-		x = (this->x)+d;	y = (this->y)+d;
-		break;
-		case kNEPartition:
-		x = (this->x)-d;	y = (this->y)+d;
-		break;
-		case kSWPartition:
-		x = (this->x)+d;	y = (this->y)-d;
-		break;
-		case kSEPartition:
-		x = (this->x)-d;	y = (this->y)-d;
-		break;
-	}
-	return Region(x, y, d);
-}
-
-bool Region::contain(double x, double y) {
-	double d = this->r;
-	return (x >= this->x-d) && (x < this->x+d) && (y >= this->y-d) && (y < this->y+d);
-}
-
-bool Region::contain(Region reg) {
-	double d = this->r;
-	return (reg.x >= this->x-d) && (reg.x < this->x+d) && (reg.y >= this->y-d) && (reg.y < this->y+d);
-}
-
-template <class T> enum partition QuadTree<T>::getRegion(T *object) {
-	Region *reg = this->region;
-	double x = object->getX(), y = object->getY();
-	
-	if ( reg->partition(kNWPartition).contain(x, y) )
-		return kNWPartition;
-	if ( reg->partition(kNEPartition).contain(x, y) )
-		return kNEPartition;
-	if ( reg->partition(kSWPartition).contain(x, y) )
-		return kSWPartition;
-	return kSEPartition;
-}
-
-//	g++ -O3, i3 3.2GH 4GB, 1000000times => 4.16sec, 10000000times => x
-template <class T> void QuadTree<T>::insert(T *object) {
-	if ( this->isLeaf ) {
-		//	this->objects[i].getX() & getY() are same.
-		if ( this->objects[0]->getX() == object->getX() && object->getY() == this->objects[0]->getY() ) {	//	same (x,y) pair
-			this->objects.push_back(object);
-		} else {
-			for ( unsigned int i = 0; i < this->objects.size(); i++ ) {
-				enum partition p = this->getRegion(this->objects[i]);
-				if ( this->trees[p] == NULL ) {
-					this->trees[p] = new QuadTree<T>(this->objects[i], this->region->partition(p));	//	this called first time of this loop
-				} else {
-					this->trees[p]->insert(this->objects[i]);
-				}
-			}
-			this->objects.clear();
-			this->isLeaf = false;
-		}
-	}
-	
-	enum partition p = this->getRegion(object);
-	if ( this->trees[p] == NULL ) {
-		this->trees[p] = new QuadTree<T>(object, this->region->partition(p));
-	} else {
-		this->trees[p]->insert(object);
-	}
-}
-
-//	g++ -O3, i3 3.2GH 4GB, 1000000times => 6.72sec(including insert 4.16sec)
-template <class T> std::vector< QuadTree<T>* > QuadTree<T>::searchRegion(Region reg) {
-	//	this->objects[i].getX() & getY() are same.
-	if ( this->isLeaf && reg.contain(this->objects[0]->getX(), this->objects[0]->getY()) ) {
-		std::vector< QuadTree<T>* > trees;
-		trees.push_back(this);
-		return trees;
-	}
-	
-	std::vector< QuadTree<T>* > trees;
-	
-	if ( this->trees[kNWPartition] != NULL ) {
-		std::vector< QuadTree<T>* > nws = this->trees[kNWPartition]->searchRegion(reg);
-		for ( unsigned int i = 0; i < nws.size(); i++ ) {
-			trees.push_back(nws[i]);
-		}
-	}
-	if ( this->trees[kNEPartition] != NULL ) {
-		std::vector< QuadTree<T>* > nes = this->trees[kNEPartition]->searchRegion(reg);
-		for ( unsigned int i = 0; i < nes.size(); i++ ) {
-			trees.push_back(nes[i]);
-		}
-	}
-	if ( this->trees[kSWPartition] != NULL ) {
-		std::vector< QuadTree<T>* > sws = this->trees[kSWPartition]->searchRegion(reg);
-		for ( unsigned int i = 0; i < sws.size(); i++ ) {
-			trees.push_back(sws[i]);
-		}
-	}
-	if ( this->trees[kSEPartition] != NULL ) {
-		std::vector< QuadTree<T>* > ses = this->trees[kSEPartition]->searchRegion(reg);
-		for ( unsigned int i = 0; i < ses.size(); i++ ) {
-			trees.push_back(ses[i]);
-		}
-	}
-	return trees;
-}
-
-
-
-
-
+#include "location.hpp"
 
 /*
-
 class Point {
 public:
-	Point(const Point &p) {
-		this->x = p.x;	this->y = p.y;
-	}
 	Point(double x, double y) {
-		this->x = x;	this->y = y;
-	}
-	Point() {
-		
-	}
-	double getX() {
-		return x;
-	}
-	double getY() {
-		return y;
+		this->x = x; this->y = y;
 	}
 	double x;
 	double y;
 };
+
 int main (int argc, char const *argv[])
 {
-	Point *p = new Point(50,50);
-	Region searchReg = Region(50,50,5.1);
-	QuadTree<Point> *tree = new QuadTree<Point>(p, Region(50,50,50000000));
+	QuadTree<Point> *t = new QuadTree<Point>(Region(0,0,10,10));
+	Point *a = new Point(3,4);
+	Point *b = new Point(-1,3);
+	Point *c = new Point(4,4);
+	t->add(a);
+	t->add(b);
+	t->add(c);
 	
-	for ( int i = 0; i < 1000000; i++ ) {
-		double x = (double)(rand()) / rand();
-		double y = (double)(rand()) / rand();
-		Point *p = new Point(x+45, y+45);
-//		printf("insert (%f, %f)\n", p->x, p->y);
-		tree->insert(p);
-	}
+	t->dump();
 	
-	std::vector< QuadTree<Point>* > results = tree->searchRegion(searchReg);
-	for ( unsigned int i = 0; i < results.size(); i++ ) {
-	//	printf("[%d] x: %f, y: %f\n", results[i]->objects.size(),results[i]->objects[0]->x, results[i]->objects[0]->y);
+	std::vector< QuadTree<Point>* > vec = t->findRegion(Region(3,4,300,100));
+	for ( unsigned int i = 0; i < vec.size(); i++ ) {
+		std::vector<Point *> points = vec[i]->getObjects();
+		for ( unsigned int j = 0; j < points.size(); j++ ) {
+			printf("%d,%d (%f, %f)\n", i, j, points[j]->x, points[j]->y);
+		}
+//		printf("%d (%f, %f)\n", i, vec[i]->x, vec[i]->y);
 	}
-	printf("size() %d\n", (int)results.size());
+	printf("size() = %d\n", (int)vec.size());
 	
 	return 0;
 }
 */
+
+
+template <class T> QuadTree<T>::QuadTree(Region region) {
+	this->region = new Region(region);
+	this->trees[0] = NULL;
+	this->trees[1] = NULL;
+	this->trees[2] = NULL;
+	this->trees[3] = NULL;
+	this->objects = new std::vector<T *>();
+	this->depth = 0;
+}
+
+template <class T> QuadTree<T>::QuadTree(Region region, int depth) {
+	this->region = new Region(region);
+	this->trees[0] = NULL;
+	this->trees[1] = NULL;
+	this->trees[2] = NULL;
+	this->trees[3] = NULL;
+	this->objects = new std::vector<T *>();
+	this->depth = depth;
+}
+
+template <class T> QuadTree<T>::~QuadTree() {
+	delete this->region;
+	delete this->objects;
+}
+
+template <class T> void QuadTree<T>::dump() {
+	printf("<%p> %d: p = (%f, %f), %s region ", this, this->depth, this->x, this->y, (this->isLeaf() ? "leaf" : "edge"));
+	this->region->dump();
+	for ( int i = 0; i < 4; i++ ) {
+		QuadTree *tree = this->trees[i];
+		if ( tree != NULL )
+			tree->dump();
+	}
+}
+
+template <class T> std::vector<T *> QuadTree<T>::getObjects() {
+	
+	//	if leaf, return this.objects
+	if ( this->isLeaf() ) {
+		return std::vector<T *>(*this->objects);
+	}
+	
+	//	if not leaf, gather objects of the subtrees
+	std::vector<T *> objects = std::vector<T *>();
+	for ( int i = 0; i < 4; i++ ) {
+		if ( this->trees[i] != NULL ) {
+			std::vector<T *> ret = this->trees[i]->getObjects();
+			for ( unsigned int j = 0; j < ret.size(); j++ ) {
+				objects.push_back(ret[j]);
+			}
+		}
+	}
+	return objects;
+}
+
+template <class T> bool QuadTree<T>::isEqualRegionTo(T *object) {
+    static const double M = 180.0 / (M_PI * 6378150.0); //  1m
+    return fabs(this->x - object->x) <= M && fabs(this->y - object->y) <= M;
+}
+
+template <class T> std::vector< QuadTree<T>* > QuadTree<T>::findRegion(Region region) {
+	
+//	this->dump();
+//	printf("\n");
+	std::vector< QuadTree<T>* > trees = std::vector< QuadTree<T>* >();
+	
+	//	region is bigger than this.region
+	if ( region.contain(*this->region) ) {	
+		trees.push_back(this);
+		return trees;
+	
+	//	if leaf, check region contains (this.x, y)
+	} else if ( this->isLeaf() ) {
+		if ( region.contain(this->x, this->y) ) {
+			trees.push_back(this);
+		}
+		return trees;
+		
+	//	if not leaf, gather trees that region contains
+	} else {
+		for ( int i = 0; i < 4; i++ ) {
+			//	null check & graph cut
+			if ( this->trees[i] != NULL && (this->trees[i]->region->include(region) || region.include(*this->trees[i]->region)) ) {
+				std::vector< QuadTree<T>* > ret = this->trees[i]->findRegion(region);
+				for ( unsigned int j = 0; j < ret.size(); j++ ) {
+					trees.push_back(ret[j]);
+				}
+			}
+		}
+	}
+	
+	return trees;
+}
+
+template <class T> void QuadTree<T>::add(T *object) {
+	if ( this->isLeaf() ) {
+		if ( this->objects->size() == 0 ) {	//	first time
+			this->x = object->x;
+			this->y = object->y;
+			this->objects->push_back(object);
+		} else {	//	
+			if ( this->isEqualRegionTo(object) ) {
+				this->objects->push_back(object);
+			} else {
+				//	partition region & put objects into the splited regions
+				Region parts[4];
+				parts[0] = this->region->partition(kNWPartition, this->region->x, this->region->y);
+				parts[1] = this->region->partition(kNEPartition, this->region->x, this->region->y);
+				parts[2] = this->region->partition(kSWPartition, this->region->x, this->region->y);
+				parts[3] = this->region->partition(kSEPartition, this->region->x, this->region->y);
+				this->objects->push_back(object);
+				for ( unsigned int i = 0; i < this->objects->size(); i++ ) {
+					T *obj = (*this->objects)[i];
+					for ( int i = 0; i < 4; i++ ) {
+						if ( parts[i].contain(obj->x, obj->y) ) {
+							if ( this->trees[i] == NULL ) {
+								this->trees[i] = new QuadTree(parts[i], this->depth+1);
+							}
+							this->trees[i]->add(obj);
+							break;
+						}
+					}
+				}
+				this->objects->clear();
+			}
+		}
+	
+	//	is not Leaf
+	} else {
+		Region parts[4];
+		parts[0] = this->region->partition(kNWPartition, this->region->x, this->region->y);
+		parts[1] = this->region->partition(kNEPartition, this->region->x, this->region->y);
+		parts[2] = this->region->partition(kSWPartition, this->region->x, this->region->y);
+		parts[3] = this->region->partition(kSEPartition, this->region->x, this->region->y);
+		for ( int i = 0; i < 4; i++ ) {
+			if ( parts[i].contain(object->x, object->y) ) {
+				this->trees[i]->add(object);
+				break;
+			}
+		}
+	}
+}
+
+template <class T> bool QuadTree<T>::isLeaf() {
+	return (this->trees[0] == NULL) && (this->trees[1] == NULL) && (this->trees[2] == NULL) && (this->trees[3] == NULL);
+}
+
+
+template class QuadTree<Location>;
+
+
+

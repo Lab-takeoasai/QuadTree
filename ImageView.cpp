@@ -1,4 +1,7 @@
 #include "imageview.h"
+//#include "region.hpp"
+//#include "quadtree.hpp"
+
 
 ImageView::ImageView(QWidget *parent) :
     QWidget(parent) {
@@ -8,7 +11,6 @@ ImageView::ImageView(QWidget *parent) :
 ImageView::~ImageView() {
     delete image_;
 }
-
 
 void ImageView::setImage(QPixmap *image) {
     if ( image != NULL ) {
