@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
               tree->add(locs.at(i));
     }
     tree->dump();
-    delete ladybug;
+    //delete ladybug;
 
     return a.exec();
 }

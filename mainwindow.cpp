@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     image->load("/Users/asai/Desktop/image.jpg");
 
     MapView *mapView = new MapView(this);
-    mapView->setGeometry(0,0,300, 500);
+    mapView->setGeometry(0,0,this->width(), this->height());
     mapView->setImage(image);
 
 }

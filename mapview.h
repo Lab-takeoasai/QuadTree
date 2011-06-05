@@ -5,7 +5,7 @@
 #include <QPainter>
 #include <QPixmap>
 
-//class Region;
+class Region;
 //class QuadTree;
 class MapView : public QWidget
 {
@@ -16,8 +16,8 @@ public:     //  functions
 
     void setImage(QPixmap *image);
     QPixmap *getImage();
-    //void setRegion(Region *reg);
-    //Region *getRegion();
+    void setRegion(Region *reg);
+    Region *getRegion();
 
 private:    //  functions
      void paintEvent(QPaintEvent *e);   //  drawView
@@ -30,7 +30,7 @@ public slots:
 
 private:    //  vars
     QPixmap *image_;
-    //Region *region_;
+    Region *region_;
 };
 
 #endif // MAPVIEW_H
