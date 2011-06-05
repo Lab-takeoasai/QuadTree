@@ -10,14 +10,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    QPixmap *image = new QPixmap();
-    image->load("/Users/asai/Desktop/image.jpg");
-
-    MapView *mapView = new MapView(this);
-    mapView->setGeometry(0,0,this->width(), this->height());
-    mapView->setImage(image);
-
 }
 
 MainWindow::~MainWindow()

@@ -1,22 +1,19 @@
 #include <QtGui/QApplication>
-#include "mainwindow.h"
+
+#include "mapviewcontroller.h"
+
 
 #include <string>
 #include <vector>
 
-#include "region.hpp"
-#include "quadtree.hpp"
-#include "ladybug.hpp"
-#include "location.hpp"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow w;
 
+    MapViewController *controller = new MapViewController();
 
-    w.show();
-
+/*
     LadyBug *ladybug = new LadyBug("", "/Users/asai/Desktop/gps.txt");
     QuadTree<Location> *tree = new QuadTree<Location>(Region(50,50,1000,1000));
     std::vector<Location *> locs = ladybug->getLocations();
@@ -26,6 +23,6 @@ int main(int argc, char *argv[])
     }
     tree->dump();
     //delete ladybug;
-
+*/
     return a.exec();
 }

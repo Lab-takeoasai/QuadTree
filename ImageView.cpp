@@ -1,7 +1,4 @@
 #include "imageview.h"
-//#include "region.hpp"
-//#include "quadtree.hpp"
-
 
 ImageView::ImageView(QWidget *parent) :
     QWidget(parent) {
@@ -24,7 +21,6 @@ void ImageView::setImage(QPixmap *image) {
 QPixmap *ImageView::getImage() {
     return image_;
 }
-
 
 //  privates
 

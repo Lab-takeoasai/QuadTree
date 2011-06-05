@@ -1,9 +1,10 @@
 #include "mapview.h"
-#include "stdio.h"
-#include "region.hpp"
 
+#include "stdio.h"
 
 #include "imageview.h"
+#include "region.hpp"
+#include "mapviewcontroller.h"
 
 MapView::MapView(QWidget *parent) :
     QWidget(parent)
@@ -45,6 +46,14 @@ Region *MapView::getRegion() {
     return this->region_;
 }
 
+void MapView::setViewController(MapViewController *controller) {
+    this->viewController = controller;
+}
+
+MapViewController *MapView::getViewController() {
+    return this->viewController;
+}
+
 
 
 //  privates
@@ -57,10 +66,12 @@ void MapView::paintEvent(QPaintEvent *e) {
 }
 
 void MapView::mousePressEvent(QMouseEvent *) {
-    printf("mouse press event");
-    ImageView *imageView = new ImageView();
-    imageView->setImage(this->getImage());
-    imageView->show();
+    //  TODO: Regionの計算
+    //  MapViewのRegionとMouseEventの座標から、検索領域のRegionを作り、Controllerに返す。
+    //  ControllerがそのRegionから、座標を検索し、popupを出す
+    this->getViewController()->showRegion(Region(0,0,0,0));
+
+
 }
 void MapView::mouseDoubleClickEvent(QMouseEvent *) {
 

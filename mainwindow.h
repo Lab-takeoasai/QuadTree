@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "ImageView.hpp"
 
 namespace Ui {
     class MainWindow;
@@ -19,7 +18,6 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    ImageView *imageView;
 };
 
 #endif // MAINWINDOW_H

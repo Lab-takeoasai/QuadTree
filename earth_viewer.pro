@@ -18,7 +18,8 @@ SOURCES += main.cpp\
         ladybug.cpp\
         quadtree.cpp\
         mapview.cpp \
-        imageview.cpp
+        imageview.cpp \
+    mapviewcontroller.cpp
 
 HEADERS  += mainwindow.h\
         Exif.hpp\
@@ -27,6 +28,7 @@ HEADERS  += mainwindow.h\
         location.hpp\
         ladybug.hpp\
         mapview.h \
-        imageview.h
+        imageview.h \
+    mapviewcontroller.h
 
 FORMS    += mainwindow.ui
