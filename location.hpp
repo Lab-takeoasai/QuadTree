@@ -3,6 +3,7 @@
 class LadyBug;
 class Location {
 public:
+    Location(double x, double y);   //  for debug use
 	Location(LadyBug *ladybug, std::string line);
 	~Location();
 	void dump();
@@ -24,6 +25,5 @@ public:
 	
 	
 	LadyBug *ladybug;
-private:
 	bool isError;
 };

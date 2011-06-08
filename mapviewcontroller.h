@@ -2,10 +2,11 @@
 #define MAPVIEWCONTROLLER_H
 
 #include <vector>
+#include "QuadTree.hpp"
 
 class LadyBug;
+class Location;
 class Region;
-class QuadTree;
 class MainWindow;
 class MapView;
 class MapViewController
@@ -16,10 +17,10 @@ public:
     void showRegion(Region region);
 
 private:
-    QuadTree *tree;
+    QuadTree<Location> *tree;
     MapView *mapView;
     MainWindow *mainWindow;
-    std::vector<LadyBug> *ladybugs;
+    std::vector<LadyBug *> *ladybugs;
 };
 
 #endif // MAPVIEWCONTROLLER_H

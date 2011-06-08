@@ -11,7 +11,6 @@ bool Region::contain(double x, double y) {
 bool Region::contain(Region region) {
 	return	this->contain(region.getMinX(), region.getMinY()) &&
 			this->contain(region.getMaxX(), region.getMaxY());
-//	return (this->getMinX() <= region.getMinX()) && (region.getMaxX() <= this->getMaxX()) && (this->getMinY() <= region.getMinY()) && (region.getMaxY() <= this->getMaxY());
 }
 
 bool Region::isValid() {

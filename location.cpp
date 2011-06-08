@@ -32,6 +32,11 @@ void Location::dump() {
 	}
 }
 
+Location::Location(double x, double y) {
+    this->x = x;
+    this->y = y;
+}
+
 Location::Location(LadyBug *ladybug, std::string line) {
 	this->ladybug = ladybug;
 	
