@@ -16,17 +16,17 @@
 
 MapViewController::MapViewController() {
 
-    Region region = Region(50, 50, 1000, 1000);   //  Regionは全体
+    Region region = Region(140, 40, 10, 10);   //  Regionは全体
 
     //  create ladybugs
     this->tree = new QuadTree<Location>(region);
     this->ladybugs = new std::vector<LadyBug *>();
     for(;;) {
         LadyBug *ladybug = new LadyBug("", "/Users/takeo/Desktop/gps.txt");
-        std::vector<Location *> locs = ladybug->getLocations();
-        for ( unsigned int i = 0; i < locs.size(); i++ ) {
-            if ( !locs.at(i)->isError ) {
-                this->tree->add(locs.at(i));
+        std::vector<Location *> *locs = ladybug->getLocations();
+        for ( unsigned int i = 0; i < locs->size(); i++ ) {
+            if ( !locs->at(i)->isError ) {
+                this->tree->add(locs->at(i));
             }
         }
         this->ladybugs->push_back(ladybug);
@@ -43,6 +43,7 @@ MapViewController::MapViewController() {
     this->mapView = new MapView(this->mainWindow);
     this->mapView->setGeometry(0,0,this->mainWindow->width(), this->mainWindow->height());
     this->mapView->setImage(image);
+    this->mapView->setLocations(this->ladybugs->at(0)->getLocations()); //  TODO: 見せる範囲を指定する
     this->mapView->setViewController(this);
     this->mapView->setRegion(&region);
 
@@ -72,5 +73,8 @@ void MapViewController::showRegion(Region region) {
         printf("not found in ");
     }
     region.dump();
+
+    printf("how many %d\n", (int)this->tree->getObjects().size());
+    ;
 
 }

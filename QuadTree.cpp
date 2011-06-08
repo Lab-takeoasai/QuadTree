@@ -63,6 +63,9 @@ template <class T> bool QuadTree<T>::isEqualRegionTo(T *object) {
 
 template <class T> T *QuadTree<T>::findFirstObjectInRegion(Region region) {
     if ( this->isLeaf() ) {
+        printf("found?\n");
+        this->dump();
+        region.dump();
         if ( region.contain(this->x, this->y) ) {
             return this->objects->at(0);
         }

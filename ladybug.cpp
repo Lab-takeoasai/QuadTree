@@ -15,8 +15,8 @@ int main (int argc, char const *argv[])
 }
 */
 
-std::vector<Location *> LadyBug::getLocations() {
-    return std::vector<Location *>(*this->locations);
+std::vector<Location *> *LadyBug::getLocations() {
+    return this->locations;
 }
 
 LadyBug::LadyBug(std::string pgrFile, std::string gpsFile) {

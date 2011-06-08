@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QPixmap>
 
+class Location;
 class Region;
 class MapViewController;
 class MapView : public QWidget
@@ -21,6 +22,9 @@ public:     //  functions
     void setViewController(MapViewController *reg);
     MapViewController *getViewController();
 
+    void setLocations(std::vector<Location *> *locs);
+    std::vector<Location *> *getLocations();
+
 private:    //  functions
      void paintEvent(QPaintEvent *e);   //  drawView
      void mousePressEvent(QMouseEvent *);
@@ -33,6 +37,7 @@ public slots:
 private:    //  vars
     QPixmap *image_;
     Region *region_;
+    std::vector<Location *> *locations;
     MapViewController *viewController;
 };
 
