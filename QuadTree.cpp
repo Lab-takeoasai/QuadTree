@@ -63,7 +63,9 @@ template <class T> bool QuadTree<T>::isEqualRegionTo(T *object) {
 
 template <class T> T *QuadTree<T>::findFirstObjectInRegion(Region region) {
     if ( this->isLeaf() ) {
-        return this->objects->at(0);
+        if ( region.contain(this->x, this->y) ) {
+            return this->objects->at(0);
+        }
     } else {
         for ( int i = 0; i < 4; i++ ) {
 			//	null check & graph cut

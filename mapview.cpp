@@ -6,6 +6,43 @@
 #include "region.hpp"
 #include "mapviewcontroller.h"
 
+
+#include <QMouseEvent>
+
+
+//  privates
+
+void MapView::paintEvent(QPaintEvent *e) {
+    if ( this->getImage() != NULL ) {
+        QPainter painter(this);
+        painter.drawPixmap(0,0,*(this->getImage()));
+    }
+}
+
+void MapView::mousePressEvent(QMouseEvent *e) {
+
+    Region *r = this->getRegion();
+    double x = r->x + (r->width * ((double)e->x() / this->width() - 0.5));
+    double y = r->y + (r->height * ((double)e->y() / this->height() - 0.5));
+
+    //  TODO: width / 100, height / 100を検索範囲にしてあるので、適切に変更すること
+    this->getViewController()->showRegion(Region(x, y, r->width/100.0, r->height/100.0));
+
+
+}
+void MapView::mouseDoubleClickEvent(QMouseEvent *e) {
+
+}
+
+
+
+
+
+
+
+//  Initializations & decontructer
+//  setter & getter
+
 MapView::MapView(QWidget *parent) :
     QWidget(parent)
 {
@@ -53,27 +90,3 @@ void MapView::setViewController(MapViewController *controller) {
 MapViewController *MapView::getViewController() {
     return this->viewController;
 }
-
-
-
-//  privates
-
-void MapView::paintEvent(QPaintEvent *e) {
-    if ( this->getImage() != NULL ) {
-        QPainter painter(this);
-        painter.drawPixmap(0,0,*(this->getImage()));
-    }
-}
-
-void MapView::mousePressEvent(QMouseEvent *) {
-    //  TODO: Regionの計算
-    //  MapViewのRegionとMouseEventの座標から、検索領域のRegionを作り、Controllerに返す。
-    //  ControllerがそのRegionから、座標を検索し、popupを出す
-    this->getViewController()->showRegion(Region(0,0,0,0));
-
-
-}
-void MapView::mouseDoubleClickEvent(QMouseEvent *) {
-
-}
-

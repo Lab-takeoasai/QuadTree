@@ -22,11 +22,12 @@ MapViewController::MapViewController() {
     this->tree = new QuadTree<Location>(region);
     this->ladybugs = new std::vector<LadyBug *>();
     for(;;) {
-        LadyBug *ladybug = new LadyBug("", "/Users/asai/Desktop/gps.txt");
+        LadyBug *ladybug = new LadyBug("", "/Users/takeo/Desktop/gps.txt");
         std::vector<Location *> locs = ladybug->getLocations();
         for ( unsigned int i = 0; i < locs.size(); i++ ) {
-            if ( !locs.at(i)->isError )
-                  this->tree->add(locs.at(i));
+            if ( !locs.at(i)->isError ) {
+                this->tree->add(locs.at(i));
+            }
         }
         this->ladybugs->push_back(ladybug);
         break;  //  TODO: add many ladybugs
@@ -56,25 +57,20 @@ MapViewController::~MapViewController() {
 
 
 void MapViewController::showRegion(Region region) {
-    //  TODO: regionから、treeを検索し、適切なimageをpopupする
-    printf("----get here!\n");
-
     QPixmap *image = new QPixmap();
     image->load("/Users/takeo/Desktop/image.jpg");
 
 
-    //
     Location *loc = this->tree->findFirstObjectInRegion(region);
     if ( loc != NULL ) {
-        //printf("found (%f, %f)", loc->x, loc->y);
+        printf("found (%f, %f) in ", loc->x, loc->y);
+
+        ImageView *imageView = new ImageView();
+        imageView->setImage(image);
+        imageView->show();
     } else {
-        printf("not found");
+        printf("not found in ");
     }
-
-
-    ImageView *imageView = new ImageView();
-    imageView->setImage(image);
-    imageView->show();
-
+    region.dump();
 
 }
