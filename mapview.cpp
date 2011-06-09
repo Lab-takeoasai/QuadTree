@@ -23,12 +23,12 @@ void MapView::paintEvent(QPaintEvent *e) {
 
     if ( this->getLocations() != NULL ) {
         Region *r = this->getRegion();
-        double dx = r->width/10.0;
-        double dy = r->height/10.0;
+        double dx = r->width/2.0;
+        double dy = r->height/2.0;
 
         QPainter painter(this);
         QRect rect = painter.viewport();
-        painter.setViewport(rect.x(), rect.y(), rect.width(),rect.height());
+//        painter.setViewport(rect.x(), rect.y(), rect.width(),rect.height());
 
         painter.setPen(Qt::red);
         painter.setWindow(r->getMinX(), r->getMinY(), r->width, r->height);
@@ -36,13 +36,13 @@ void MapView::paintEvent(QPaintEvent *e) {
         for ( unsigned int i = 0; i < this->getLocations()->size(); i++ ) {
             //  TODO: width / 10, height / 10を検索範囲にしてあるので、適切に変更すること
             Location *l = this->getLocations()->at(i);
-            painter.drawEllipse(r->x - dx/2.0, r->y - dy/2.0, dx, dy);
+            painter.drawEllipse(r->x, r->y, dx, dy);
 //            printf("(%f, %f), (%f, %f)", r->x + r->width/2.0, r->y + r->height/2.0, r->width/10.0, r->height/10.0);
-            painter.drawPoint(r->x - dx/2.0, r->y - dy/2.0);
+            painter.drawPoint(r->x, r->y);
 
 
         }
-        //painter.drawLine(r->getMaxX(), r->getMaxY(), r->getMinX(), r->getMinY());
+        painter.drawLine(r->getMaxX(), r->getMaxY(), r->getMinX(), r->getMinY());
     }
 }
 
@@ -58,6 +58,7 @@ void MapView::mousePressEvent(QMouseEvent *e) {
 
 
 }
+
 void MapView::mouseDoubleClickEvent(QMouseEvent *e) {
 
 }
