@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4625BE78139F903100A9999B /* ladybug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4625BE76139F903100A9999B /* ladybug.cpp */; };
 		D91738FA139DC5920010964B /* degub_main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D91738F9139DC5920010964B /* degub_main.cpp */; };
 		D91738FD139DC5A70010964B /* location.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D91738FB139DC5A70010964B /* location.cpp */; };
 		D9173902139DC6260010964B /* quadtree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D91738FE139DC6260010964B /* quadtree.cpp */; };
@@ -26,6 +27,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4625BE76139F903100A9999B /* ladybug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ladybug.cpp; sourceTree = SOURCE_ROOT; };
+		4625BE77139F903100A9999B /* ladybug.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ladybug.hpp; sourceTree = SOURCE_ROOT; };
 		D91738E7139DC5700010964B /* quadtree_debug */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = quadtree_debug; sourceTree = BUILT_PRODUCTS_DIR; };
 		D91738F9139DC5920010964B /* degub_main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = degub_main.cpp; sourceTree = SOURCE_ROOT; };
 		D91738FB139DC5A70010964B /* location.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = location.cpp; sourceTree = SOURCE_ROOT; };
@@ -67,6 +70,8 @@
 			isa = PBXGroup;
 			children = (
 				D91738F9139DC5920010964B /* degub_main.cpp */,
+				4625BE76139F903100A9999B /* ladybug.cpp */,
+				4625BE77139F903100A9999B /* ladybug.hpp */,
 				D91738FB139DC5A70010964B /* location.cpp */,
 				D91738FC139DC5A70010964B /* location.hpp */,
 				D91738FE139DC6260010964B /* quadtree.cpp */,
@@ -128,6 +133,7 @@
 				D91738FD139DC5A70010964B /* location.cpp in Sources */,
 				D9173902139DC6260010964B /* quadtree.cpp in Sources */,
 				D9173903139DC6260010964B /* region.cpp in Sources */,
+				4625BE78139F903100A9999B /* ladybug.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

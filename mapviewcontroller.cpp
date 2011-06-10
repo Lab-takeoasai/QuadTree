@@ -16,13 +16,14 @@
 
 MapViewController::MapViewController() {
 
-    Region region = Region(140, 40, 10, 10);   //  Regionは全体
+    // TODO: あたりは右上
+    Region region = Region(140, 40, 5, 5);   //  Regionは全体
 
     //  create ladybugs
     this->tree = new QuadTree<Location>(region);
     this->ladybugs = new std::vector<LadyBug *>();
     for(;;) {
-        LadyBug *ladybug = new LadyBug("", "/Users/takeo/Desktop/gps.txt");
+        LadyBug *ladybug = new LadyBug("", "/Users/asai/Desktop/gps.txt");
         std::vector<Location *> *locs = ladybug->getLocations();
         for ( unsigned int i = 0; i < locs->size(); i++ ) {
             if ( !locs->at(i)->isError ) {
@@ -39,7 +40,7 @@ MapViewController::MapViewController() {
 
     //  create MapView
     QPixmap *image = new QPixmap();
-    image->load("/Users/takeo/Desktop/image.jpg");
+    image->load("/Users/asai/Desktop/image.jpg");
     this->mapView = new MapView(this->mainWindow);
     this->mapView->setGeometry(0,0,this->mainWindow->width(), this->mainWindow->height());
     this->mapView->setImage(image);
@@ -59,7 +60,7 @@ MapViewController::~MapViewController() {
 
 void MapViewController::showRegion(Region region) {
     QPixmap *image = new QPixmap();
-    image->load("/Users/takeo/Desktop/image.jpg");
+    image->load("/Users/asai/Desktop/image.jpg");
 
 
     Location *loc = this->tree->findFirstObjectInRegion(region);
@@ -70,11 +71,11 @@ void MapViewController::showRegion(Region region) {
         imageView->setImage(image);
         imageView->show();
     } else {
-        printf("not found in ");
-    }
-    region.dump();
+        printf("(140.85316324, 38.03759849) NOT 404 found in ");
 
-    printf("how many %d\n", (int)this->tree->getObjects().size());
-    ;
+        region.dump();
+    }
+
+
 
 }
