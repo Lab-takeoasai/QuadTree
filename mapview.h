@@ -25,6 +25,9 @@ public:     //  functions
     void setLocations(std::vector<Location *> *locs);
     std::vector<Location *> *getLocations();
 
+    Region convertToMapView(Region region);
+    Region convertFromMapView(Region region);
+
 private:    //  functions
      void paintEvent(QPaintEvent *e);   //  drawView
      void mousePressEvent(QMouseEvent *);
