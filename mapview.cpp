@@ -9,7 +9,6 @@
 
 #include "mapviewcontroller.h"
 
-
 #include <QMouseEvent>
 
 
@@ -23,44 +22,37 @@ void MapView::paintEvent(QPaintEvent *e) {
 
     if ( this->getLocations() != NULL ) {
         Region *r = this->getRegion();
-        double dx = r->width/2.0;
-        double dy = r->height/2.0;
+        double w_ratio = ((double)this->width()/r->width);
+        double h_ratio = ((double)this->height()/r->height);
 
         QPainter painter(this);
-        QRect rect = painter.viewport();
-//        painter.setViewport(rect.x(), rect.y(), rect.width(),rect.height());
-
+        QMatrix matrix;
+        matrix.setMatrix(w_ratio, 0, 0, -h_ratio, this->x() - w_ratio * r->getMinX(), this->y() + this->height() + h_ratio * r->getMinY());
+        painter.setWorldMatrix(matrix);
         painter.setPen(Qt::red);
-        painter.setWindow(r->getMinX(), r->getMinY(), r->width, r->height);
-//        painter.setViewport(r->getMinX(), r->getMinY(), r->width, r->height);
+
         for ( unsigned int i = 0; i < this->getLocations()->size(); i++ ) {
-            //  TODO: width / 10, height / 10を検索範囲にしてあるので、適切に変更すること
             Location *l = this->getLocations()->at(i);
-            painter.drawEllipse(r->x, r->y, dx, dy);
-//            printf("(%f, %f), (%f, %f)", r->x + r->width/2.0, r->y + r->height/2.0, r->width/10.0, r->height/10.0);
-            painter.drawPoint(r->x, r->y);
-
-
+            painter.drawPoint(QPointF(l->x, l->y));
         }
-        painter.drawLine(r->getMaxX(), r->getMaxY(), r->getMinX(), r->getMinY());
+        //painter.drawLine(QPointF(140.0, 40.0), QPointF(142.4, 40.0));
+        //painter.drawLine(QPointF(140.0, 40.0), QPointF(138.0, 40.0));
+        //painter.drawLine(QPointF(140.0, 40.0), QPointF(140.0, 38.0));
+        //painter.drawLine(QPointF(140.0, 40.0), QPointF(140.0, 42.4));
     }
 }
 
 void MapView::mousePressEvent(QMouseEvent *e) {
 
-    Region *r = this->getRegion();
-    double x = r->x + (r->width * ((double)e->x() / this->width() - 0.5));
-    double y = r->y + (r->height * ((double)e->y() / this->height() - 0.5));
-
-    //  TODO: width / 10, height / 10を検索範囲にしてあるので、適切に変更すること
-    //this->getViewController()->showRegion(Region(x, y, r->width/10.0, r->height/10.0));
-    this->getViewController()->showRegion(Region(x, y, 1.0, 1.0));
-
-
 }
 
 void MapView::mouseDoubleClickEvent(QMouseEvent *e) {
+    Region *r = this->getRegion();
+    double x = r->x + (r->width * ((double)e->x() / this->width() - 0.5));
+    double y = r->y + (r->height * (0.5 - (double)(e->y() - this->y()) / this->height()));
 
+    //  TODO: width / 10, height / 10を検索範囲にしてあるので、適切に変更すること
+    this->getViewController()->showRegion(Region(x, y, r->width/10.0, r->height/10.0));
 }
 
 
