@@ -30,7 +30,6 @@ void MapView::paintEvent(QPaintEvent *e) {
         matrix.setMatrix(w_ratio, 0, 0, -h_ratio, this->x() - w_ratio * r->getMinX(), this->y() + this->height() + h_ratio * r->getMinY());
         painter.setWorldMatrix(matrix);
         painter.setPen(Qt::red);
-
         for ( unsigned int i = 0; i < this->getLocations()->size(); i++ ) {
             Location *l = this->getLocations()->at(i);
             painter.drawPoint(QPointF(l->x, l->y));
@@ -54,10 +53,6 @@ void MapView::mouseDoubleClickEvent(QMouseEvent *e) {
     //  TODO: width / 10, height / 10を検索範囲にしてあるので、適切に変更すること
     this->getViewController()->showRegion(Region(x, y, r->width/10.0, r->height/10.0));
 }
-
-
-
-
 
 
 
